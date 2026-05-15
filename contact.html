@@ -1,0 +1,232 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — Maati Ka Swad | Get in Touch</title>
+  <meta name="description" content="Contact Maati Ka Swad for orders, queries, and feedback. WhatsApp, email, or fill our contact form.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+<div id="page-loader"><div class="loader-inner"><div class="loader-logo">माटी का स्वाद</div><div class="loader-spinner"></div></div></div>
+<div id="toast-container"></div>
+<div class="search-overlay" id="search-overlay">
+  <div class="search-box"><span>🔍</span><input type="text" id="search-input" placeholder="Search products..."><button class="search-btn" onclick="document.getElementById('search-overlay').classList.remove('open')">✕</button></div>
+  <div class="search-results" id="search-results"></div>
+</div>
+
+<nav class="navbar opaque">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">🍶 Maati Ka <span>Swad</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="shop.html" class="nav-link">Shop</a></li>
+      <li><a href="about.html" class="nav-link">About</a></li>
+      <li><a href="contact.html" class="nav-link active">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-icon-btn search-open-btn">🔍</button>
+      <a href="login.html" class="nav-icon-btn nav-user-btn">👤</a>
+      <a href="cart.html" class="nav-icon-btn" style="position:relative">🛒 <span class="cart-count" style="display:none"></span></a>
+    </div>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </div>
+  <div class="mobile-menu">
+    <a href="index.html" class="nav-link">🏠 Home</a>
+    <a href="shop.html" class="nav-link">🛍️ Shop</a>
+    <a href="about.html" class="nav-link">ℹ️ About</a>
+    <a href="contact.html" class="nav-link">📞 Contact</a>
+    <a href="cart.html" class="nav-link">🛒 Cart</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="page-hero">
+  <div class="container">
+    <div class="page-hero-content">
+      <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>Contact</span></div>
+      <span class="page-hero-tag">We're here for you</span>
+      <h1>Get in Touch</h1>
+      <p>Questions, bulk orders, feedback — we love hearing from you.</p>
+    </div>
+  </div>
+</div>
+
+<section style="padding:80px 0">
+  <div class="container">
+    <div class="contact-layout">
+      <!-- Contact Info Card -->
+      <div class="contact-info-card reveal-left">
+        <h2>Let's Talk</h2>
+        <p>Whether you have a question about our products, want to place a bulk order, or just want to share that our pickle changed your life — we want to hear it!</p>
+
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📞</div>
+          <div>
+            <div class="contact-detail-label">Phone & WhatsApp</div>
+            <div class="contact-detail-value">+91 98765 43210</div>
+            <div class="contact-detail-value">Mon–Sat, 9am–7pm</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">✉️</div>
+          <div>
+            <div class="contact-detail-label">Email</div>
+            <div class="contact-detail-value">hello@maatikaswad.com</div>
+            <div class="contact-detail-value">Reply within 24 hours</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📍</div>
+          <div>
+            <div class="contact-detail-label">Address</div>
+            <div class="contact-detail-value">Maati Ka Swad Foods Pvt. Ltd.</div>
+            <div class="contact-detail-value">Sodala, Jaipur, Rajasthan — 302006</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">⏰</div>
+          <div>
+            <div class="contact-detail-label">Working Hours</div>
+            <div class="contact-detail-value">Monday to Saturday</div>
+            <div class="contact-detail-value">9:00 AM — 7:00 PM IST</div>
+          </div>
+        </div>
+
+        <a href="https://wa.me/919876543210?text=Hi! I have a question about Maati Ka Swad" class="btn btn-white mt-24" target="_blank" style="width:100%;justify-content:center">
+          💬 Chat on WhatsApp
+        </a>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="contact-form-card reveal-right">
+        <h2 style="margin-bottom:6px">Send Us a Message</h2>
+        <p style="color:var(--text-muted);margin-bottom:28px">We'll get back to you within 24 hours on weekdays.</p>
+
+        <form id="contact-form" onsubmit="submitContactForm(event)">
+          <div class="product-form-grid">
+            <div class="form-group">
+              <label class="form-label">Your Name *</label>
+              <input type="text" class="form-control" id="cf-name" placeholder="Ramesh Sharma" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" id="cf-phone" placeholder="+91 98765 43210">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input type="email" class="form-control" id="cf-email" placeholder="ramesh@email.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Subject</label>
+            <select class="form-control" id="cf-subject">
+              <option>Product Query</option>
+              <option>Order Related</option>
+              <option>Bulk/Corporate Order</option>
+              <option>Delivery Issue</option>
+              <option>Feedback / Compliment</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your Message *</label>
+            <textarea class="form-control" id="cf-message" rows="5" placeholder="Tell us how we can help..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full btn-lg" id="cf-submit">
+            📩 Send Message
+          </button>
+        </form>
+
+        <!-- Success state -->
+        <div id="form-success" style="display:none;text-align:center;padding:40px 24px">
+          <div style="font-size:4rem;margin-bottom:16px">✅</div>
+          <h3>Message Sent!</h3>
+          <p style="color:var(--text-muted);margin-top:8px">Thank you for reaching out. We'll reply within 24 hours. Meanwhile, you can also <a href="https://wa.me/919876543210" style="color:var(--primary)">chat with us on WhatsApp</a>.</p>
+          <button class="btn btn-outline mt-24" onclick="resetContactForm()">Send Another Message</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background:var(--cream-dark);padding:80px 0">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Quick Answers</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+    <div style="max-width:720px;margin:0 auto">
+      <div id="faq-container"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding:32px 0">
+      <span>© 2024 Maati Ka Swad. All rights reserved.</span>
+      <div class="payment-badges"><span class="payment-badge">UPI</span><span class="payment-badge">Cards</span><span class="payment-badge">COD</span></div>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/919876543210" class="whatsapp-btn" target="_blank">💬</a>
+
+<script src="js/products.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+<script>
+const FAQS = [
+  { q: "How long does delivery take?", a: "Typically 3-5 business days across India. Metro cities usually receive orders in 2-3 days." },
+  { q: "Do you offer free shipping?", a: "Yes! Orders above ₹499 get free shipping. Below that, a flat shipping fee of ₹60 applies." },
+  { q: "Can I return or exchange a product?", a: "We have a 7-day return policy for sealed/unopened products. For any quality issues, please contact us immediately — we'll make it right." },
+  { q: "Are your products safe for kids and diabetics?", a: "Most of our products are natural and safe. Our Khajur Roll and Atta Pinni use jaggery instead of refined sugar. Please check individual product pages for details." },
+  { q: "Do you accept bulk/corporate orders?", a: "Yes! We specialize in bulk orders for Diwali hampers, weddings, corporate gifting, etc. Contact us for special pricing." },
+  { q: "Do you ship internationally?", a: "Currently we ship within India only. International shipping is launching soon — sign up for our newsletter to be notified." },
+  { q: "How should I store the products?", a: "Pickles should be stored in a cool, dry place with the lid tightly closed. Spices and dry snacks should be kept away from moisture. Sweets are best consumed within 2-3 weeks of opening." }
+];
+
+document.getElementById('faq-container').innerHTML = FAQS.map((faq, i) => `
+  <div style="background:var(--white);border-radius:var(--radius-md);margin-bottom:12px;box-shadow:var(--shadow-sm);overflow:hidden">
+    <button onclick="toggleFAQ(${i})" style="width:100%;text-align:left;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:.95rem;color:var(--text-dark)">
+      <span>${faq.q}</span>
+      <span id="faq-icon-${i}" style="font-size:1.2rem;transition:transform .3s;flex-shrink:0;margin-left:16px">+</span>
+    </button>
+    <div id="faq-answer-${i}" style="display:none;padding:0 20px 18px;font-size:.88rem;color:var(--text-muted);line-height:1.75">${faq.a}</div>
+  </div>
+`).join('');
+
+function toggleFAQ(i) {
+  const ans = document.getElementById(`faq-answer-${i}`);
+  const icon = document.getElementById(`faq-icon-${i}`);
+  const open = ans.style.display === 'none';
+  ans.style.display = open ? 'block' : 'none';
+  icon.textContent = open ? '−' : '+';
+  icon.style.transform = open ? 'rotate(45deg)' : '';
+}
+
+function submitContactForm(e) {
+  e.preventDefault();
+  const btn = document.getElementById('cf-submit');
+  btn.textContent = '⏳ Sending...';
+  btn.disabled = true;
+  setTimeout(() => {
+    document.getElementById('contact-form').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  }, 1500);
+}
+
+function resetContactForm() {
+  document.getElementById('contact-form').style.display = 'block';
+  document.getElementById('form-success').style.display = 'none';
+  document.getElementById('contact-form').reset();
+  document.getElementById('cf-submit').textContent = '📩 Send Message';
+  document.getElementById('cf-submit').disabled = false;
+}
+</script>
+</body>
+</html>

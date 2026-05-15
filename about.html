@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us — Maati Ka Swad | Our Story & Values</title>
+  <meta name="description" content="Discover the story behind Maati Ka Swad — a family business built on tradition, purity, and love for authentic Indian home cooking.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+<div id="page-loader"><div class="loader-inner"><div class="loader-logo">माटी का स्वाद</div><div class="loader-spinner"></div></div></div>
+<div id="toast-container"></div>
+<div class="search-overlay" id="search-overlay">
+  <div class="search-box"><span>🔍</span><input type="text" id="search-input" placeholder="Search products..."><button class="search-btn" onclick="document.getElementById('search-overlay').classList.remove('open')">✕</button></div>
+  <div class="search-results" id="search-results"></div>
+</div>
+
+<nav class="navbar opaque">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">🍶 Maati Ka <span>Swad</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="shop.html" class="nav-link">Shop</a></li>
+      <li><a href="about.html" class="nav-link active">About</a></li>
+      <li><a href="contact.html" class="nav-link">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-icon-btn search-open-btn">🔍</button>
+      <a href="login.html" class="nav-icon-btn nav-user-btn">👤</a>
+      <a href="cart.html" class="nav-icon-btn" style="position:relative">🛒 <span class="cart-count" style="display:none"></span></a>
+    </div>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </div>
+  <div class="mobile-menu">
+    <a href="index.html" class="nav-link">🏠 Home</a>
+    <a href="shop.html" class="nav-link">🛍️ Shop</a>
+    <a href="about.html" class="nav-link">ℹ️ About</a>
+    <a href="contact.html" class="nav-link">📞 Contact</a>
+    <a href="cart.html" class="nav-link">🛒 Cart</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="page-hero">
+  <div class="container">
+    <div class="page-hero-content">
+      <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>About Us</span></div>
+      <span class="page-hero-tag">Made with Love since 2019</span>
+      <h1>Our Story</h1>
+      <p>How one woman's recipe book became a national brand.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Founder Story -->
+<section class="about-hero-section" style="padding-top:80px">
+  <div class="container">
+    <div class="about-story-grid">
+      <div class="reveal-left">
+        <img src="assets/images/cat-pickles.jpg" alt="Traditional Indian Kitchen" class="about-img" onerror="this.style.background='linear-gradient(135deg,var(--cream-dark),var(--primary-pale))';this.src=''">
+      </div>
+      <div class="reveal-right">
+        <span class="section-tag">The Beginning</span>
+        <h2 class="section-title text-left">From a Recipe Notebook to 50,000 Homes</h2>
+        <p style="color:var(--text-muted);line-height:1.9;margin-bottom:16px">
+          In 2019, <strong>Sunita Devi</strong>, a homemaker in Jaipur, decided to share what her mother-in-law had passed down to her — a tattered notebook filled with handwritten recipes for pickles, spice blends, sweets, and snacks.
+        </p>
+        <p style="color:var(--text-muted);line-height:1.9;margin-bottom:16px">
+          She started small. A few jars at a time. Neighbors would show up at her door asking for more. Then their neighbors. Then people from the next street. Within a year, WhatsApp groups were buzzing with "where can I order Sunita ji's achaar?"
+        </p>
+        <p style="color:var(--text-muted);line-height:1.9">
+          Today, <strong>Maati Ka Swad</strong> — "Taste of the Soil" — ships to over 350 cities across India. But nothing has changed in the kitchen: same recipes, same care, same love.
+        </p>
+
+        <!-- Timeline -->
+        <div class="timeline mt-32">
+          <div class="timeline-item">
+            <div class="timeline-dot">🏡</div>
+            <div class="timeline-content"><div class="timeline-year">2019</div><h4>Started at Home</h4><p>First 50 jars sold to neighbors in Jaipur.</p></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot">📱</div>
+            <div class="timeline-content"><div class="timeline-year">2020</div><h4>Went Online</h4><p>Launched WhatsApp ordering — 500+ orders in first month.</p></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot">🚚</div>
+            <div class="timeline-content"><div class="timeline-year">2021</div><h4>All India Shipping</h4><p>Partnered with logistics to deliver across India.</p></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot">🏆</div>
+            <div class="timeline-content"><div class="timeline-year">2024</div><h4>50,000+ Families</h4><p>Featured in Times Food Awards as "Best Homemade Brand".</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="trust-strip">
+  <div class="container">
+    <div class="flex flex-between flex-wrap gap-24 text-center">
+      <div style="color:white"><div style="font-family:var(--font-display);font-size:2rem;font-weight:800">50,000+</div><div style="font-size:.8rem;opacity:.8">Happy Families</div></div>
+      <div style="color:white"><div style="font-family:var(--font-display);font-size:2rem;font-weight:800">16+</div><div style="font-size:.8rem;opacity:.8">Products</div></div>
+      <div style="color:white"><div style="font-family:var(--font-display);font-size:2rem;font-weight:800">4.8★</div><div style="font-size:.8rem;opacity:.8">Average Rating</div></div>
+      <div style="color:white"><div style="font-family:var(--font-display);font-size:2rem;font-weight:800">350+</div><div style="font-size:.8rem;opacity:.8">Cities Delivered</div></div>
+      <div style="color:white"><div style="font-family:var(--font-display);font-size:2rem;font-weight:800">0%</div><div style="font-size:.8rem;opacity:.8">Preservatives</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Values -->
+<section style="background:var(--cream-dark);padding:80px 0">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">What We Stand For</span>
+      <h2 class="section-title">Our Values</h2>
+    </div>
+    <div class="values-grid reveal">
+      <div class="value-card">
+        <div class="value-card-icon">🌿</div>
+        <h3>Purity</h3>
+        <p>No preservatives, no artificial colors, no shortcuts. What you read on the label is exactly what goes in your food — nothing more, nothing less.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-card-icon">📜</div>
+        <h3>Tradition</h3>
+        <p>We don't "modernize" our recipes. We protect them. Every product reflects generations of Indian culinary wisdom — unchanged and uncompromised.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-card-icon">❤️</div>
+        <h3>Love</h3>
+        <p>Food made with love tastes different. We genuinely care about what we make and who we make it for. Every jar is packed like it's going to our own family.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-card-icon">🤝</div>
+        <h3>Fair Trade</h3>
+        <p>We source directly from farmers at fair prices. When you buy from us, you support not just our family, but the farming communities we work with.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Process -->
+<section style="background:var(--cream);padding:80px 0">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">How We Make It</span>
+      <h2 class="section-title">Our Craft Process</h2>
+      <p class="section-subtitle">No industrial machines. No assembly lines. Just careful hands and time-tested methods.</p>
+    </div>
+    <div class="grid-4 reveal">
+      <div style="text-align:center;padding:24px">
+        <div style="font-size:3rem;margin-bottom:16px">🌾</div>
+        <h3 style="font-size:1.1rem;margin-bottom:8px">1. Source</h3>
+        <p style="font-size:.85rem;color:var(--text-muted)">Ingredients hand-picked from trusted local farmers. Fresh, seasonal, and responsibly sourced.</p>
+      </div>
+      <div style="text-align:center;padding:24px">
+        <div style="font-size:3rem;margin-bottom:16px">☀️</div>
+        <h3 style="font-size:1.1rem;margin-bottom:8px">2. Prepare</h3>
+        <p style="font-size:.85rem;color:var(--text-muted)">Sun-drying, stone-grinding, and slow-roasting processes preserve the full natural flavor.</p>
+      </div>
+      <div style="text-align:center;padding:24px">
+        <div style="font-size:3rem;margin-bottom:16px">🫙</div>
+        <h3 style="font-size:1.1rem;margin-bottom:8px">3. Craft</h3>
+        <p style="font-size:.85rem;color:var(--text-muted)">Small-batch handcrafting follows the original recipe. Every jar passes a personal taste-check.</p>
+      </div>
+      <div style="text-align:center;padding:24px">
+        <div style="font-size:3rem;margin-bottom:16px">📦</div>
+        <h3 style="font-size:1.1rem;margin-bottom:8px">4. Deliver</h3>
+        <p style="font-size:.85rem;color:var(--text-muted)">Packed in eco-friendly, leak-proof containers and shipped fresh to your doorstep within 3-5 days.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team -->
+<section style="background:var(--cream-dark);padding:80px 0">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">The People Behind It</span>
+      <h2 class="section-title">Meet Our Team</h2>
+    </div>
+    <div class="team-grid reveal">
+      <div class="team-card">
+        <div class="team-avatar">👩</div>
+        <div class="team-name">Sunita Devi</div>
+        <div class="team-role">Founder & Head Chef</div>
+        <p style="font-size:.82rem;color:var(--text-muted);margin-top:8px">"Every recipe I make, I ask myself — would my mother-in-law approve? If yes, it ships."</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">👨</div>
+        <div class="team-name">Manoj Sharma</div>
+        <div class="team-role">Co-Founder & Operations</div>
+        <p style="font-size:.82rem;color:var(--text-muted);margin-top:8px">"We built Maati Ka Swad to prove that homemade food can scale without losing its soul."</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">👩‍🍳</div>
+        <div class="team-name">Kavita Ben</div>
+        <div class="team-role">Master Pickle Artisan</div>
+        <p style="font-size:.82rem;color:var(--text-muted);margin-top:8px">"I've been making achaar for 30 years. At Maati Ka Swad, I make sure every jar tastes like home."</p>
+      </div>
+    </div>
+    <div class="text-center mt-32 reveal">
+      <a href="shop.html" class="btn btn-primary btn-lg">🛍️ Shop Our Products →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">Maati Ka Swad</div>
+        <div class="footer-tagline">माटी का स्वाद — Taste of the Soil</div>
+        <p class="footer-desc">Bringing authentic homemade Indian flavors to families across the country.</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn">📸</a><a href="#" class="social-btn">👍</a>
+          <a href="https://wa.me/919876543210" class="social-btn">💬</a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Shop</h4><a href="shop.html?cat=pickles">Pickles</a><a href="shop.html?cat=spices">Spices</a><a href="shop.html?cat=snacks">Snacks</a><a href="shop.html?cat=sweets">Sweets</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="about.html">About Us</a><a href="contact.html">Contact</a><a href="#">Careers</a><a href="#">Blog</a></div>
+      <div class="footer-col"><h4>Contact</h4><a href="tel:+919876543210">📞 +91 98765 43210</a><a href="mailto:hello@maatikaswad.com">✉️ hello@maatikaswad.com</a><a href="#">📍 Jaipur, Rajasthan</a></div>
+    </div>
+  </div>
+  <div class="footer-bottom"><div class="container" style="display:flex;align-items:center;justify-content:space-between"><span>© 2024 Maati Ka Swad. All rights reserved.</span><div class="payment-badges"><span class="payment-badge">UPI</span><span class="payment-badge">Cards</span><span class="payment-badge">COD</span></div></div></div>
+</footer>
+
+<a href="https://wa.me/919876543210" class="whatsapp-btn" target="_blank">💬</a>
+<script src="js/products.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

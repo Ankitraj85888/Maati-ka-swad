@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop — Pickles, Spices, Snacks & Sweets | Maati Ka Swad</title>
+  <meta name="description" content="Browse our full collection of homemade Indian pickles, spices, snacks and sweets. Filter by category and price. Free shipping above ₹499.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+<div id="page-loader"><div class="loader-inner"><div class="loader-logo">माटी का स्वाद</div><div class="loader-spinner"></div></div></div>
+<div id="toast-container"></div>
+<div class="search-overlay" id="search-overlay">
+  <div class="search-box">
+    <span>🔍</span>
+    <input type="text" id="search-input" placeholder="Search products...">
+    <button class="search-btn" onclick="document.getElementById('search-overlay').classList.remove('open')">✕</button>
+  </div>
+  <div class="search-results" id="search-results"></div>
+</div>
+
+<nav class="navbar opaque">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">🍶 Maati Ka <span>Swad</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="shop.html" class="nav-link active">Shop</a></li>
+      <li><a href="about.html" class="nav-link">About</a></li>
+      <li><a href="contact.html" class="nav-link">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-icon-btn search-open-btn">🔍</button>
+      <a href="login.html" class="nav-icon-btn nav-user-btn" title="My Account">👤</a>
+      <a href="cart.html" class="nav-icon-btn" style="position:relative">🛒 <span class="cart-count" style="display:none"></span></a>
+    </div>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </div>
+  <div class="mobile-menu">
+    <a href="index.html" class="nav-link">🏠 Home</a>
+    <a href="shop.html" class="nav-link">🛍️ Shop</a>
+    <a href="about.html" class="nav-link">ℹ️ About</a>
+    <a href="contact.html" class="nav-link">📞 Contact</a>
+    <a href="cart.html" class="nav-link">🛒 Cart</a>
+  </div>
+</nav>
+
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="container">
+    <div class="page-hero-content">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span id="breadcrumb-cat">All Products</span>
+      </div>
+      <span class="page-hero-tag">Handcrafted with Love</span>
+      <h1 id="shop-hero-title">Our Products</h1>
+      <p id="shop-hero-desc">Pure, authentic, and made with zero shortcuts.</p>
+    </div>
+  </div>
+</div>
+
+<section style="padding:48px 0 80px">
+  <div class="container">
+    <!-- Active Filters -->
+    <div class="active-filters" id="active-filters"></div>
+    <div class="shop-layout">
+      <!-- Filter Sidebar -->
+      <aside class="filter-sidebar">
+        <h3>Filters</h3>
+        <div class="filter-group">
+          <h4>Category</h4>
+          <label class="filter-option"><input type="checkbox" name="cat" value="all" checked onchange="applyFilters()"><span class="filter-option-label">All Products</span><span class="filter-option-count">16</span></label>
+          <label class="filter-option"><input type="checkbox" name="cat" value="pickles" onchange="applyFilters()"><span class="filter-option-label">🥭 Pickles</span><span class="filter-option-count">4</span></label>
+          <label class="filter-option"><input type="checkbox" name="cat" value="spices" onchange="applyFilters()"><span class="filter-option-label">🌶️ Spices</span><span class="filter-option-count">4</span></label>
+          <label class="filter-option"><input type="checkbox" name="cat" value="snacks" onchange="applyFilters()"><span class="filter-option-label">🫓 Snacks</span><span class="filter-option-count">4</span></label>
+          <label class="filter-option"><input type="checkbox" name="cat" value="sweets" onchange="applyFilters()"><span class="filter-option-label">✨ Sweets</span><span class="filter-option-count">4</span></label>
+        </div>
+        <div class="filter-group">
+          <h4>Price Range</h4>
+          <input type="range" id="price-range" min="50" max="300" value="300" step="10" oninput="updatePriceLabel(this.value);applyFilters()">
+          <div class="price-range-labels"><span>₹50</span><span>Up to ₹<span id="price-label">300</span></span></div>
+        </div>
+        <div class="filter-group">
+          <h4>Special</h4>
+          <label class="filter-option"><input type="checkbox" name="badge" value="bestseller" onchange="applyFilters()"><span class="filter-option-label">🔥 Bestsellers</span></label>
+          <label class="filter-option"><input type="checkbox" name="badge" value="new" onchange="applyFilters()"><span class="filter-option-label">✨ New Arrivals</span></label>
+          <label class="filter-option"><input type="checkbox" name="badge" value="organic" onchange="applyFilters()"><span class="filter-option-label">🌿 Organic</span></label>
+        </div>
+        <button class="filter-clear-btn" onclick="clearFilters()">✕ Clear All Filters</button>
+      </aside>
+
+      <!-- Main -->
+      <div class="shop-main">
+        <div class="shop-toolbar">
+          <span class="shop-result-count" id="result-count">Showing 16 products</span>
+          <div style="display:flex;gap:12px;align-items:center">
+            <select class="sort-select" id="sort-select" onchange="applyFilters()">
+              <option value="default">Sort: Default</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="rating">Top Rated</option>
+              <option value="new">Newest First</option>
+            </select>
+            <div class="view-toggle">
+              <button class="view-btn active" onclick="setView('grid',this)" title="Grid View">⊞</button>
+              <button class="view-btn" onclick="setView('list',this)" title="List View">☰</button>
+            </div>
+          </div>
+        </div>
+        <div class="products-grid" id="products-grid">
+          <!-- Populated by JS -->
+        </div>
+        <div id="no-products" class="empty-state" style="display:none">
+          <div class="empty-state-icon">🔍</div>
+          <h3>No Products Found</h3>
+          <p>Try adjusting your filters or search query.</p>
+          <button class="btn btn-primary" onclick="clearFilters()">Clear Filters</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding:32px 0">
+      <span>© 2024 Maati Ka Swad. All rights reserved.</span>
+      <div class="payment-badges">
+        <span class="payment-badge">UPI</span><span class="payment-badge">Cards</span><span class="payment-badge">COD</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/919876543210" class="whatsapp-btn" target="_blank">💬</a>
+
+<script src="js/products.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+<script src="js/shop.js"></script>
+</body>
+</html>

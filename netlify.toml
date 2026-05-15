@@ -1,0 +1,47 @@
+[build]
+  command   = "npm run build"
+  publish   = "dist"
+
+# React SPA routes — serve index.html for all /app routes
+[[redirects]]
+  from   = "/login"
+  to     = "/index.html"
+  status = 200
+
+[[redirects]]
+  from   = "/signup"
+  to     = "/index.html"
+  status = 200
+
+[[redirects]]
+  from   = "/cart"
+  to     = "/index.html"
+  status = 200
+
+[[redirects]]
+  from   = "/checkout"
+  to     = "/index.html"
+  status = 200
+
+# Static HTML pages — served as-is from dist root
+[[redirects]]
+  from   = "/shop"
+  to     = "/shop.html"
+  status = 200
+
+[[redirects]]
+  from   = "/about"
+  to     = "/about.html"
+  status = 200
+
+[[redirects]]
+  from   = "/contact"
+  to     = "/contact.html"
+  status = 200
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"

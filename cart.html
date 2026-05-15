@@ -1,0 +1,239 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart & Checkout — Maati Ka Swad</title>
+  <meta name="description" content="Review your cart and complete your order. Secure checkout with UPI, cards, and COD.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+<div id="page-loader"><div class="loader-inner"><div class="loader-logo">माटी का स्वाद</div><div class="loader-spinner"></div></div></div>
+<div id="toast-container"></div>
+
+<nav class="navbar opaque">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">🍶 Maati Ka <span>Swad</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="shop.html" class="nav-link">Shop</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="nav-icon-btn nav-user-btn">👤</a>
+      <a href="cart.html" class="nav-icon-btn active" style="background:var(--primary-pale);color:var(--primary);position:relative">🛒 <span class="cart-count" style="display:none"></span></a>
+    </div>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </div>
+  <div class="mobile-menu">
+    <a href="index.html" class="nav-link">🏠 Home</a>
+    <a href="shop.html" class="nav-link">🛍️ Shop</a>
+  </div>
+</nav>
+
+<main class="cart-page">
+  <div class="container">
+    <!-- Checkout Steps -->
+    <div class="checkout-steps" id="checkout-steps">
+      <div class="checkout-step active" data-step="cart" onclick="goStep('cart')">
+        <span class="checkout-step-num">1</span>
+        🛒 Cart
+      </div>
+      <div class="checkout-step" data-step="address" onclick="goStep('address')">
+        <span class="checkout-step-num">2</span>
+        📍 Address
+      </div>
+      <div class="checkout-step" data-step="payment" onclick="goStep('payment')">
+        <span class="checkout-step-num">3</span>
+        💳 Payment
+      </div>
+    </div>
+
+    <!-- STEP 1: Cart -->
+    <div id="step-cart">
+      <div class="cart-layout">
+        <div class="cart-items-section">
+          <div class="cart-section-title">Shopping Cart (<span id="cart-item-count">0</span> items)</div>
+          <div id="cart-items-list"></div>
+          <div id="cart-empty" class="empty-state" style="display:none">
+            <div class="empty-state-icon">🛒</div>
+            <h3>Your cart is empty</h3>
+            <p>Explore our collection and add some delicious products!</p>
+            <a href="shop.html" class="btn btn-primary">Start Shopping →</a>
+          </div>
+        </div>
+        <div class="order-summary-card">
+          <h3>Order Summary</h3>
+          <div class="coupon-row">
+            <input type="text" class="coupon-input" id="coupon-input" placeholder="Coupon code...">
+            <button class="coupon-btn" onclick="applyCoupon()">Apply</button>
+          </div>
+          <div class="summary-line"><span class="summary-label">Subtotal</span><span class="summary-value" id="summary-subtotal">₹0</span></div>
+          <div class="summary-line"><span class="summary-label">Shipping</span><span class="summary-value" id="summary-shipping">₹0</span></div>
+          <div class="summary-line" id="discount-line" style="display:none"><span class="summary-label" style="color:var(--accent)">Discount</span><span class="summary-value" style="color:var(--accent)" id="summary-discount">-₹0</span></div>
+          <div class="summary-divider"></div>
+          <div class="summary-line"><span class="summary-label summary-total">Total</span><span class="summary-value summary-total" id="summary-total">₹0</span></div>
+          <button class="btn btn-primary btn-full mt-16" id="proceed-btn" onclick="goStep('address')" style="font-size:1rem;padding:14px">Proceed to Checkout →</button>
+          <div class="checkout-trust">
+            <div class="checkout-trust-item">🔒 Secure 256-bit SSL Encryption</div>
+            <div class="checkout-trust-item">🚚 Free Shipping on orders above ₹499</div>
+            <div class="checkout-trust-item">↩️ Easy 7-day returns</div>
+            <div class="checkout-trust-item">💯 100% Authentic Products</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Address -->
+    <div id="step-address" style="display:none">
+      <div class="cart-layout">
+        <div>
+          <div class="cart-section-title">Delivery Address</div>
+          <div style="background:var(--white);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-sm)">
+            <div class="product-form-grid">
+              <div class="form-group">
+                <label class="form-label">First Name *</label>
+                <input type="text" class="form-control" id="addr-fname" placeholder="Ramesh" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Last Name *</label>
+                <input type="text" class="form-control" id="addr-lname" placeholder="Sharma">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone *</label>
+                <input type="tel" class="form-control" id="addr-phone" placeholder="+91 98765 43210" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email *</label>
+                <input type="email" class="form-control" id="addr-email" placeholder="ramesh@email.com" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Full Address *</label>
+              <textarea class="form-control" id="addr-street" placeholder="House No., Street, Locality..." rows="2" required></textarea>
+            </div>
+            <div class="product-form-grid">
+              <div class="form-group">
+                <label class="form-label">City *</label>
+                <input type="text" class="form-control" id="addr-city" placeholder="Jaipur" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">State *</label>
+                <select class="form-control" id="addr-state">
+                  <option>Rajasthan</option><option>Delhi</option><option>Maharashtra</option>
+                  <option>Gujarat</option><option>Uttar Pradesh</option><option>Punjab</option>
+                  <option>Karnataka</option><option>Tamil Nadu</option><option>Others</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">PIN Code *</label>
+                <input type="text" class="form-control" id="addr-pin" placeholder="302001" maxlength="6" required>
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="goStep('payment')">Continue to Payment →</button>
+            <button class="btn btn-outline mt-8" onclick="goStep('cart')" style="margin-left:12px">← Back</button>
+          </div>
+        </div>
+        <div class="order-summary-card">
+          <h3>Order Summary</h3>
+          <div id="address-summary-items"></div>
+          <div class="summary-divider"></div>
+          <div class="summary-line"><span class="summary-label summary-total">Total</span><span class="summary-value summary-total" id="addr-total">₹0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: Payment -->
+    <div id="step-payment" style="display:none">
+      <div class="cart-layout">
+        <div>
+          <div class="cart-section-title">Payment Method</div>
+          <div style="background:var(--white);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-sm)">
+            <div class="payment-methods">
+              <label class="payment-method-card selected" id="pm-upi">
+                <input type="radio" name="payment" value="upi" checked>
+                <span class="payment-method-icon">📱</span>
+                <div>
+                  <div class="payment-method-label">UPI Payment</div>
+                  <div class="payment-method-desc">PhonePe, GPay, Paytm, BHIM</div>
+                </div>
+              </label>
+              <div id="upi-input" style="padding:12px 16px;background:var(--cream);border-radius:var(--radius-md);margin-top:-8px">
+                <input type="text" class="form-control" placeholder="Enter UPI ID (e.g. ramesh@paytm)" style="margin-bottom:0">
+              </div>
+              <label class="payment-method-card" id="pm-card" onclick="selectPayment('card')">
+                <input type="radio" name="payment" value="card">
+                <span class="payment-method-icon">💳</span>
+                <div>
+                  <div class="payment-method-label">Credit / Debit Card</div>
+                  <div class="payment-method-desc">Visa, Mastercard, RuPay</div>
+                </div>
+              </label>
+              <label class="payment-method-card" id="pm-netbanking" onclick="selectPayment('netbanking')">
+                <input type="radio" name="payment" value="netbanking">
+                <span class="payment-method-icon">🏦</span>
+                <div>
+                  <div class="payment-method-label">Net Banking</div>
+                  <div class="payment-method-desc">All major banks supported</div>
+                </div>
+              </label>
+              <label class="payment-method-card" id="pm-cod" onclick="selectPayment('cod')">
+                <input type="radio" name="payment" value="cod">
+                <span class="payment-method-icon">💵</span>
+                <div>
+                  <div class="payment-method-label">Cash on Delivery</div>
+                  <div class="payment-method-desc">Pay when you receive your order</div>
+                </div>
+              </label>
+            </div>
+            <div style="background:var(--cream);border-radius:var(--radius-md);padding:14px;font-size:.82rem;color:var(--text-muted);margin-bottom:20px">
+              🔒 Your payment information is encrypted and secure. We never store card details.
+            </div>
+            <button class="btn btn-primary btn-lg" onclick="placeOrder()" id="place-order-btn">
+              ✅ Place Order (₹<span id="final-total-display">0</span>)
+            </button>
+            <button class="btn btn-outline mt-8" onclick="goStep('address')" style="margin-left:12px">← Back</button>
+          </div>
+        </div>
+        <div class="order-summary-card">
+          <h3>Order Summary</h3>
+          <div id="payment-summary-items"></div>
+          <div class="summary-divider"></div>
+          <div class="summary-line"><span class="summary-label summary-total">Total to Pay</span><span class="summary-value summary-total" id="pay-total">₹0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success -->
+    <div id="step-success" class="order-success" style="display:none">
+      <div class="order-success-icon">🎉</div>
+      <h2>Order Placed Successfully!</h2>
+      <p style="color:var(--text-muted);margin:16px 0" id="order-number">Order #SS-001</p>
+      <p style="color:var(--text-muted);max-width:480px;margin:0 auto 32px;line-height:1.8">
+        Thank you for your order! You'll receive a confirmation SMS and email shortly. Your delicious homemade food will be delivered within 3-5 business days.
+      </p>
+      <div style="display:flex;gap:12px;justify-content:center">
+        <a href="shop.html" class="btn btn-primary btn-lg">🛍️ Continue Shopping</a>
+        <a href="https://wa.me/919876543210" class="btn btn-outline" target="_blank">💬 Track on WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding:32px 0">
+      <span>© 2024 Maati Ka Swad. All rights reserved.</span>
+      <div class="payment-badges"><span class="payment-badge">UPI</span><span class="payment-badge">Cards</span><span class="payment-badge">Net Banking</span><span class="payment-badge">COD</span></div>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/919876543210" class="whatsapp-btn" target="_blank">💬</a>
+<script src="js/products.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+<script src="js/cart.js"></script>
+</body>
+</html>
