@@ -1,7 +1,9 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+
+const ADDR_KEY = 'mks_saved_address';
 
 export default function CheckoutPage() {
   const { items, subtotal, deliveryCharge, grandTotal, clearCart } = useCart();
@@ -10,8 +12,27 @@ export default function CheckoutPage() {
 
   const [step, setStep] = useState(1); // 1=address, 2=payment, 3=confirm
   const [addr, setAddr] = useState({ name: user?.name || '', mobile: user?.mobile || '', pincode: '', address: '', city: '', state: '' });
+  const [savedAddr, setSavedAddr] = useState(null);
   const [payment, setPayment] = useState('cod');
   const [placing, setPlacing] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(ADDR_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        setSavedAddr(parsed);
+        setAddr({
+          name: parsed.fullName || user?.name || '',
+          mobile: parsed.mobile || user?.mobile || '',
+          pincode: parsed.pincode || '',
+          address: parsed.fullAddress || '',
+          city: parsed.city || '',
+          state: parsed.state || '',
+        });
+      }
+    } catch {}
+  }, []);
 
   const setA = (k, v) => setAddr(p => ({ ...p, [k]: v }));
 
@@ -22,6 +43,18 @@ export default function CheckoutPage() {
 
   const handleAddress = (e) => {
     e.preventDefault();
+    localStorage.setItem(ADDR_KEY, JSON.stringify({
+      fullName: addr.name,
+      mobile: addr.mobile,
+      pincode: addr.pincode,
+      fullAddress: addr.address,
+      city: addr.city,
+      state: addr.state,
+      area: '',
+      landmark: '',
+      addressType: 'home',
+      savedAt: Date.now(),
+    }));
     setStep(2);
     window.scrollTo(0, 0);
   };
@@ -79,7 +112,35 @@ export default function CheckoutPage() {
             {/* ── Step 1: Address ── */}
             {step === 1 && (
               <div className="bg-white rounded-2xl border border-cream-dark shadow-sm p-6 sm:p-8">
-                <h2 className="font-display text-2xl font-bold text-darkbrown mb-6">Delivery Address</h2>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="font-display text-2xl font-bold text-darkbrown">Delivery Address</h2>
+                  {savedAddr && (
+                    <Link to="/delivery-address" className="text-xs text-terracotta hover:underline">Manage Addresses</Link>
+                  )}
+                </div>
+
+                {savedAddr && !addr.name && (
+                  <div className="mb-4 p-4 bg-cream rounded-xl border border-cream-dark flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-darkbrown">Saved address found</p>
+                      <p className="text-xs text-earthbrown/50">{savedAddr.fullName}, {savedAddr.city}, {savedAddr.state}</p>
+                    </div>
+                    <button
+                      onClick={() => setAddr({
+                        name: savedAddr.fullName,
+                        mobile: savedAddr.mobile,
+                        pincode: savedAddr.pincode,
+                        address: savedAddr.fullAddress,
+                        city: savedAddr.city,
+                        state: savedAddr.state,
+                      })}
+                      className="text-xs btn-bihar !px-4 !py-2"
+                    >
+                      Use Saved
+                    </button>
+                  </div>
+                )}
+
                 <form onSubmit={handleAddress} className="space-y-4">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>

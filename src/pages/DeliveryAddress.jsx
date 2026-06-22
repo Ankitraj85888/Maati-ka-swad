@@ -1,8 +1,16 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import './DeliveryAddress.css';
 
+const ADDR_KEY = 'mks_saved_address';
+
 export default function DeliveryAddress() {
-  const [form, setForm] = useState({
+  const navigate = useNavigate();
+  const [savedAddr, setSavedAddr] = useState(null);
+  const [editing, setEditing] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
+
+  const emptyForm = {
     fullName: '',
     mobile: '',
     pincode: '',
@@ -12,14 +20,24 @@ export default function DeliveryAddress() {
     fullAddress: '',
     landmark: '',
     addressType: 'home',
-  });
+  };
 
+  const [form, setForm] = useState(emptyForm);
   const [errors, setErrors] = useState({});
   const [pincodeLoading, setPincodeLoading] = useState(false);
   const [pincodeError, setPincodeError] = useState('');
   const [cityOptions, setCityOptions] = useState([]);
   const [areaOptions, setAreaOptions] = useState([]);
   const [pincodeTouched, setPincodeTouched] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(ADDR_KEY);
+      if (stored) {
+        setSavedAddr(JSON.parse(stored));
+      }
+    } catch {}
+  }, []);
 
   const setF = (key, value) => {
     setForm(prev => ({ ...prev, [key]: value }));
@@ -99,15 +117,61 @@ export default function DeliveryAddress() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
-    console.log('Delivery Address Data:', form);
-    alert('Address saved! Check console for data.');
+    const address = { ...form, savedAt: Date.now() };
+    localStorage.setItem(ADDR_KEY, JSON.stringify(address));
+    setSavedAddr(address);
+    setJustSaved(true);
+    setEditing(false);
   };
+
+  const handleEdit = () => {
+    if (savedAddr) {
+      setForm(savedAddr);
+    }
+    setEditing(true);
+    setJustSaved(false);
+  };
+
+  const handleAddNew = () => {
+    setForm(emptyForm);
+    setErrors({});
+    setEditing(true);
+    setJustSaved(false);
+  };
+
+  if (savedAddr && !editing && !justSaved) {
+    return (
+      <div className="delivery-page">
+        <div className="delivery-container">
+          <div className="delivery-header">
+            <h1>Your Address</h1>
+            <p>Manage your delivery address</p>
+          </div>
+          <div className="delivery-saved">
+            <div className="saved-badge">{savedAddr.addressType === 'home' ? '🏠' : '🏢'} {savedAddr.addressType === 'home' ? 'Home' : 'Work'}</div>
+            <div className="saved-details">
+              <p className="saved-name">{savedAddr.fullName}</p>
+              <p className="saved-mobile">📞 {savedAddr.mobile}</p>
+              <p className="saved-address">{savedAddr.fullAddress}</p>
+              <p className="saved-city">{savedAddr.area}, {savedAddr.city}, {savedAddr.state} - {savedAddr.pincode}</p>
+              {savedAddr.landmark && <p className="saved-landmark">📍 {savedAddr.landmark}</p>}
+            </div>
+            <div className="saved-actions">
+              <button onClick={handleEdit} className="saved-edit-btn">✏️ Edit Address</button>
+              <button onClick={handleAddNew} className="saved-new-btn">➕ Add New Address</button>
+            </div>
+            <Link to="/checkout" className="saved-checkout-link">Proceed to Checkout →</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="delivery-page">
       <div className="delivery-container">
         <div className="delivery-header">
-          <h1>Delivery Address</h1>
+          <h1>{savedAddr ? 'Edit Address' : 'Delivery Address'}</h1>
           <p>Enter your delivery details to continue</p>
         </div>
 
@@ -285,7 +349,7 @@ export default function DeliveryAddress() {
           </div>
 
           <button type="submit" className="submit-btn">
-            Save & Continue
+            {savedAddr ? 'Update Address' : 'Save Address'}
           </button>
         </form>
       </div>

@@ -1,8 +1,18 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useState, useEffect } from 'react';
+
+const ADDR_KEY = 'mks_saved_address';
 
 export default function CartPage() {
   const { items, itemCount, subtotal, deliveryCharge, grandTotal, updateQty, removeItem, FREE_DELIVERY_ABOVE } = useCart();
+  const [hasAddress, setHasAddress] = useState(false);
+
+  useEffect(() => {
+    try {
+      setHasAddress(!!localStorage.getItem(ADDR_KEY));
+    } catch {}
+  }, []);
 
   if (items.length === 0) {
     return (
@@ -92,7 +102,12 @@ export default function CartPage() {
                 </div>
               </div>
               {deliveryCharge === 0 && <div className="mt-3 p-2 rounded-lg bg-green-50 text-green-700 text-xs text-center font-medium">🎉 You saved ₹49 on delivery!</div>}
-              <Link to="/checkout" className="block w-full btn-bihar !py-4 !text-sm text-center mt-6">Proceed to Checkout →</Link>
+              <Link to={hasAddress ? "/checkout" : "/delivery-address"} className="block w-full btn-bihar !py-4 !text-sm text-center mt-6">
+                {hasAddress ? 'Proceed to Checkout →' : 'Add Delivery Address →'}
+              </Link>
+              <Link to="/delivery-address" className="block w-full text-center text-xs text-earthbrown/50 hover:text-terracotta mt-2 transition-colors">
+                {hasAddress ? '✏️ Edit Address' : '📝 Manage Address'}
+              </Link>
             </div>
           </div>
         </div>
