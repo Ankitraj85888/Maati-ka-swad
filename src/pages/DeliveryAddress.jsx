@@ -1,25 +1,28 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import './DeliveryAddress.css';
 
 const ADDR_KEY = 'mks_saved_address';
 
+const inputIcons = {
+  fullName: '👤',
+  mobile: '📞',
+  pincode: '📍',
+  state: '🗺️',
+  city: '🏙️',
+  area: '🏘️',
+  fullAddress: '🏠',
+  landmark: '🎯',
+};
+
 export default function DeliveryAddress() {
-  const navigate = useNavigate();
   const [savedAddr, setSavedAddr] = useState(null);
   const [editing, setEditing] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
 
   const emptyForm = {
-    fullName: '',
-    mobile: '',
-    pincode: '',
-    state: '',
-    city: '',
-    area: '',
-    fullAddress: '',
-    landmark: '',
-    addressType: 'home',
+    fullName: '', mobile: '', pincode: '', state: '', city: '', area: '',
+    fullAddress: '', landmark: '', addressType: 'home',
   };
 
   const [form, setForm] = useState(emptyForm);
@@ -30,20 +33,24 @@ export default function DeliveryAddress() {
   const [areaOptions, setAreaOptions] = useState([]);
   const [pincodeTouched, setPincodeTouched] = useState(false);
 
+  const formRef = useRef(null);
+
   useEffect(() => {
     try {
       const stored = localStorage.getItem(ADDR_KEY);
-      if (stored) {
-        setSavedAddr(JSON.parse(stored));
-      }
+      if (stored) setSavedAddr(JSON.parse(stored));
     } catch {}
   }, []);
 
+  useEffect(() => {
+    if (justSaved && formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [justSaved]);
+
   const setF = (key, value) => {
     setForm(prev => ({ ...prev, [key]: value }));
-    if (errors[key]) {
-      setErrors(prev => ({ ...prev, [key]: '' }));
-    }
+    if (errors[key]) setErrors(prev => ({ ...prev, [key]: '' }));
   };
 
   useEffect(() => {
@@ -67,17 +74,14 @@ export default function DeliveryAddress() {
       try {
         const res = await fetch(`https://api.postalpincode.in/pincode/${form.pincode}`);
         const data = await res.json();
-
         if (!data || data[0].Status === 'Error' || !data[0].PostOffice) {
           setPincodeError('Invalid pincode. Please enter a valid 6-digit pincode.');
           return;
         }
-
         const postOffices = data[0].PostOffice;
         const state = postOffices[0].Circle;
         const cities = [...new Set(postOffices.map(p => p.District))];
         const areas = postOffices.map(p => p.Name);
-
         setForm(prev => ({ ...prev, state }));
         setCityOptions(cities);
         setAreaOptions(areas);
@@ -87,29 +91,25 @@ export default function DeliveryAddress() {
         setPincodeLoading(false);
       }
     };
-
     fetchPincode();
   }, [form.pincode]);
 
   const handleCityChange = (e) => {
-    const city = e.target.value;
-    setF('city', city);
+    setF('city', e.target.value);
     setF('area', '');
   };
 
   const validate = () => {
     const newErrors = {};
-
     if (!form.fullName.trim()) newErrors.fullName = 'Full name is required';
     if (!form.mobile.trim()) newErrors.mobile = 'Mobile number is required';
-    else if (!/^\d{10}$/.test(form.mobile)) newErrors.mobile = 'Mobile number must be 10 digits';
+    else if (!/^\d{10}$/.test(form.mobile)) newErrors.mobile = 'Enter a valid 10-digit number';
     if (!form.pincode.trim()) newErrors.pincode = 'Pincode is required';
     else if (!/^\d{6}$/.test(form.pincode)) newErrors.pincode = 'Pincode must be 6 digits';
-    if (!form.state.trim()) newErrors.state = 'State is required (enter a valid pincode)';
+    if (!form.state.trim()) newErrors.state = 'Enter a valid pincode first';
     if (!form.city.trim()) newErrors.city = 'City is required';
     if (!form.area.trim()) newErrors.area = 'Area is required';
     if (!form.fullAddress.trim()) newErrors.fullAddress = 'Full address is required';
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -125,9 +125,7 @@ export default function DeliveryAddress() {
   };
 
   const handleEdit = () => {
-    if (savedAddr) {
-      setForm(savedAddr);
-    }
+    if (savedAddr) setForm(savedAddr);
     setEditing(true);
     setJustSaved(false);
   };
@@ -139,220 +137,288 @@ export default function DeliveryAddress() {
     setJustSaved(false);
   };
 
+  // ────────── Saved address view ──────────
   if (savedAddr && !editing && !justSaved) {
     return (
       <div className="delivery-page">
-        <div className="delivery-container">
+        <div className="mithila-lotus-bg" />
+        <div className="delivery-container" ref={formRef}>
           <div className="delivery-header">
-            <h1>Your Address</h1>
-            <p>Manage your delivery address</p>
+            <span className="header-badge">📍 Address</span>
+            <h1>Your Delivery Address</h1>
+            <p>Manage your saved address</p>
           </div>
+
           <div className="delivery-saved">
-            <div className="saved-badge">{savedAddr.addressType === 'home' ? '🏠' : '🏢'} {savedAddr.addressType === 'home' ? 'Home' : 'Work'}</div>
-            <div className="saved-details">
-              <p className="saved-name">{savedAddr.fullName}</p>
-              <p className="saved-mobile">📞 {savedAddr.mobile}</p>
-              <p className="saved-address">{savedAddr.fullAddress}</p>
-              <p className="saved-city">{savedAddr.area}, {savedAddr.city}, {savedAddr.state} - {savedAddr.pincode}</p>
-              {savedAddr.landmark && <p className="saved-landmark">📍 {savedAddr.landmark}</p>}
+            <div className="saved-card">
+              <div className="saved-card-top">
+                <span className={`saved-type-tag ${savedAddr.addressType}`}>
+                  {savedAddr.addressType === 'home' ? '🏠' : '🏢'} {savedAddr.addressType === 'home' ? 'Home' : 'Work'}
+                </span>
+                <span className="saved-default-badge">✓ Default</span>
+              </div>
+
+              <div className="saved-details">
+                <p className="saved-name">{savedAddr.fullName}</p>
+                <p className="saved-mobile">📞 {savedAddr.mobile}</p>
+                <div className="saved-divider" />
+                <p className="saved-address-line">{savedAddr.fullAddress}</p>
+                <p className="saved-address-line">{savedAddr.area}, {savedAddr.city}</p>
+                <p className="saved-address-line">{savedAddr.state} — {savedAddr.pincode}</p>
+                {savedAddr.landmark && <p className="saved-landmark">📍 {savedAddr.landmark}</p>}
+              </div>
+
+              <div className="saved-actions">
+                <button onClick={handleEdit} className="saved-btn outline">
+                  ✏️ Edit
+                </button>
+                <button onClick={handleAddNew} className="saved-btn outline">
+                  ➕ Add New
+                </button>
+              </div>
+
+              <Link to="/checkout" className="saved-checkout-btn">
+                Proceed to Checkout →
+              </Link>
             </div>
-            <div className="saved-actions">
-              <button onClick={handleEdit} className="saved-edit-btn">✏️ Edit Address</button>
-              <button onClick={handleAddNew} className="saved-new-btn">➕ Add New Address</button>
-            </div>
-            <Link to="/checkout" className="saved-checkout-link">Proceed to Checkout →</Link>
           </div>
         </div>
       </div>
     );
   }
 
+  // ────────── Just saved success ──────────
+  if (justSaved && savedAddr) {
+    return (
+      <div className="delivery-page">
+        <div className="mithila-lotus-bg" />
+        <div className="delivery-container" ref={formRef}>
+          <div className="delivery-header">
+            <span className="header-badge">✅ Saved</span>
+            <h1>Address Saved!</h1>
+            <p>Your delivery address has been saved successfully</p>
+          </div>
+
+          <div className="delivery-success">
+            <div className="success-animation">
+              <div className="success-circle">
+                <span className="success-check">✓</span>
+              </div>
+            </div>
+            <h2 className="success-title">Address Saved Successfully</h2>
+            <p className="success-sub">You can now proceed to checkout or edit your address</p>
+
+            <div className="saved-card success-mini-card">
+              <div className="saved-details">
+                <p className="saved-name">{savedAddr.fullName}</p>
+                <p className="saved-address-line">{savedAddr.fullAddress}</p>
+                <p className="saved-address-line">{savedAddr.city}, {savedAddr.state} — {savedAddr.pincode}</p>
+              </div>
+            </div>
+
+            <div className="success-actions">
+              <Link to="/checkout" className="success-checkout-btn">
+                Proceed to Checkout →
+              </Link>
+              <button onClick={handleEdit} className="success-edit-btn">
+                ✏️ Edit This Address
+              </button>
+              <Link to="/cart" className="success-back-btn">
+                ← Back to Cart
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ────────── Form view ──────────
   return (
     <div className="delivery-page">
-      <div className="delivery-container">
+      <div className="mithila-lotus-bg" />
+      <div className="delivery-container" ref={formRef}>
         <div className="delivery-header">
+          <span className="header-badge">
+            {savedAddr ? '✏️ Edit' : '📍 New'}
+          </span>
           <h1>{savedAddr ? 'Edit Address' : 'Delivery Address'}</h1>
-          <p>Enter your delivery details to continue</p>
+          <p>Fill in your delivery details below</p>
         </div>
 
         <form className="delivery-form" onSubmit={handleSubmit} noValidate>
           <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="fullName">Full Name <span className="required">*</span></label>
-              <input
-                id="fullName"
-                type="text"
-                placeholder="Enter full name"
-                value={form.fullName}
-                onChange={e => setF('fullName', e.target.value)}
-                className={errors.fullName ? 'input-error' : ''}
-              />
-              {errors.fullName && <span className="error-text">{errors.fullName}</span>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="mobile">Mobile Number <span className="required">*</span></label>
-              <input
-                id="mobile"
-                type="tel"
-                placeholder="Enter 10-digit mobile number"
-                value={form.mobile}
-                onChange={e => setF('mobile', e.target.value.replace(/\D/g, '').slice(0, 10))}
-                maxLength={10}
-                className={errors.mobile ? 'input-error' : ''}
-              />
-              {errors.mobile && <span className="error-text">{errors.mobile}</span>}
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="pincode">Pincode <span className="required">*</span></label>
-            <div className="pincode-wrapper">
-              <input
-                id="pincode"
-                type="text"
-                placeholder="Enter 6-digit pincode"
-                value={form.pincode}
-                onChange={e => {
-                  const val = e.target.value.replace(/\D/g, '').slice(0, 6);
-                  setF('pincode', val);
-                  if (!pincodeTouched) setPincodeTouched(true);
-                }}
-                maxLength={6}
-                className={errors.pincode || pincodeError ? 'input-error' : ''}
-              />
-              {pincodeLoading && <span className="pincode-loading">Fetching...</span>}
-            </div>
-            {errors.pincode && <span className="error-text">{errors.pincode}</span>}
-            {pincodeError && <span className="error-text">{pincodeError}</span>}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="state">State <span className="required">*</span></label>
-            <input
-              id="state"
-              type="text"
-              placeholder="Auto-filled from pincode"
-              value={form.state}
-              readOnly
-              className="input-readonly"
+            <InputField
+              id="fullName" label="Full Name" icon={inputIcons.fullName}
+              value={form.fullName} onChange={v => setF('fullName', v)}
+              placeholder="Enter full name" error={errors.fullName}
             />
-            {errors.state && <span className="error-text">{errors.state}</span>}
+            <InputField
+              id="mobile" label="Mobile Number" icon={inputIcons.mobile}
+              value={form.mobile} onChange={v => setF('mobile', v.replace(/\D/g, '').slice(0, 10))}
+              placeholder="10-digit mobile" error={errors.mobile}
+              type="tel" maxLength={10}
+            />
           </div>
+
+          <InputField
+            id="pincode" label="Pincode" icon={inputIcons.pincode}
+            value={form.pincode}
+            onChange={v => {
+              const val = v.replace(/\D/g, '').slice(0, 6);
+              setF('pincode', val);
+              if (!pincodeTouched) setPincodeTouched(true);
+            }}
+            placeholder="Enter 6-digit pincode" error={errors.pincode || pincodeError}
+            maxLength={6}
+            loading={pincodeLoading}
+            helper="Enter pincode to auto-fill city & state"
+          />
+
+          <InputField
+            id="state" label="State" icon={inputIcons.state}
+            value={form.state} readOnly
+            placeholder="Auto-filled from pincode" error={errors.state}
+            readonly
+          />
 
           <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="city">City / District <span className="required">*</span></label>
-              {cityOptions.length > 0 ? (
-                <select
-                  id="city"
-                  value={form.city}
-                  onChange={handleCityChange}
-                  className={errors.city ? 'input-error' : ''}
-                >
-                  <option value="">Select city / district</option>
-                  {cityOptions.map(city => (
-                    <option key={city} value={city}>{city}</option>
-                  ))}
-                </select>
-              ) : (
-                <input
-                  id="city"
-                  type="text"
-                  placeholder="Enter city or district"
-                  value={form.city}
-                  onChange={e => setF('city', e.target.value)}
-                  className={errors.city ? 'input-error' : ''}
-                />
-              )}
-              {errors.city && <span className="error-text">{errors.city}</span>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="area">Area / Post Office <span className="required">*</span></label>
-              {areaOptions.length > 0 ? (
-                <select
-                  id="area"
-                  value={form.area}
-                  onChange={e => setF('area', e.target.value)}
-                  className={errors.area ? 'input-error' : ''}
-                >
-                  <option value="">Select area / post office</option>
-                  {areaOptions.map(area => (
-                    <option key={area} value={area}>{area}</option>
-                  ))}
-                </select>
-              ) : (
-                <input
-                  id="area"
-                  type="text"
-                  placeholder="Enter area or post office"
-                  value={form.area}
-                  onChange={e => setF('area', e.target.value)}
-                  className={errors.area ? 'input-error' : ''}
-                />
-              )}
-              {errors.area && <span className="error-text">{errors.area}</span>}
-            </div>
+            <SelectField
+              id="city" label="City / District" icon={inputIcons.city}
+              value={form.city} onChange={handleCityChange}
+              options={cityOptions} placeholder="Select city / district"
+              error={errors.city} manualPlaceholder="Enter city or district"
+              manualValue={form.city} onManualChange={v => setF('city', v)}
+            />
+            <SelectField
+              id="area" label="Area / Post Office" icon={inputIcons.area}
+              value={form.area} onChange={v => setF('area', v.target ? v.target.value : v)}
+              options={areaOptions} placeholder="Select area / post office"
+              error={errors.area} manualPlaceholder="Enter area or post office"
+              manualValue={form.area} onManualChange={v => setF('area', v)}
+            />
           </div>
 
           <div className="form-group">
-            <label htmlFor="fullAddress">Full Address <span className="required">*</span></label>
+            <label htmlFor="fullAddress">
+              <span className="field-icon">{inputIcons.fullAddress}</span>
+              Full Address <span className="required">*</span>
+            </label>
             <textarea
               id="fullAddress"
               placeholder="House / Flat / Building No., Street, Locality"
               value={form.fullAddress}
               onChange={e => setF('fullAddress', e.target.value)}
               rows={3}
-              className={errors.fullAddress ? 'input-error' : ''}
+              className={`${errors.fullAddress ? 'input-error' : ''} has-icon`}
             />
             {errors.fullAddress && <span className="error-text">{errors.fullAddress}</span>}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="landmark">Landmark <span className="optional">(optional)</span></label>
-            <input
-              id="landmark"
-              type="text"
-              placeholder="E.g. near school, opposite mall"
-              value={form.landmark}
-              onChange={e => setF('landmark', e.target.value)}
-            />
-          </div>
+          <InputField
+            id="landmark" label="Landmark" icon={inputIcons.landmark}
+            value={form.landmark} onChange={v => setF('landmark', v)}
+            placeholder="E.g. near school, opposite mall"
+            optional
+          />
 
           <div className="form-group">
-            <label>Address Type <span className="required">*</span></label>
+            <label>
+              <span className="field-icon">🏷️</span>
+              Address Type <span className="required">*</span>
+            </label>
             <div className="address-type-group">
-              <label className={`type-option ${form.addressType === 'home' ? 'active' : ''}`}>
-                <input
-                  type="radio"
-                  name="addressType"
-                  value="home"
-                  checked={form.addressType === 'home'}
-                  onChange={e => setF('addressType', e.target.value)}
-                />
-                <span className="type-icon">🏠</span>
-                <span>Home</span>
-              </label>
-              <label className={`type-option ${form.addressType === 'work' ? 'active' : ''}`}>
-                <input
-                  type="radio"
-                  name="addressType"
-                  value="work"
-                  checked={form.addressType === 'work'}
-                  onChange={e => setF('addressType', e.target.value)}
-                />
-                <span className="type-icon">🏢</span>
-                <span>Work</span>
-              </label>
+              {[
+                { value: 'home', icon: '🏠', label: 'Home' },
+                { value: 'work', icon: '🏢', label: 'Work' },
+              ].map(t => (
+                <label
+                  key={t.value}
+                  className={`type-option ${form.addressType === t.value ? 'active' : ''}`}
+                >
+                  <input
+                    type="radio" name="addressType" value={t.value}
+                    checked={form.addressType === t.value}
+                    onChange={e => setF('addressType', e.target.value)}
+                  />
+                  <span className="type-icon">{t.icon}</span>
+                  <span className="type-label">{t.label}</span>
+                  {form.addressType === t.value && <span className="type-check">✓</span>}
+                </label>
+              ))}
             </div>
           </div>
 
           <button type="submit" className="submit-btn">
-            {savedAddr ? 'Update Address' : 'Save Address'}
+            <span className="btn-text">{savedAddr ? 'Update Address' : 'Save Address'}</span>
+            <span className="btn-arrow">→</span>
           </button>
+
+          <Link to="/cart" className="back-link">← Back to Cart</Link>
         </form>
       </div>
+    </div>
+  );
+}
+
+function InputField({ id, label, icon, value, onChange, placeholder, error, type = 'text', maxLength, readonly, loading, optional, helper }) {
+  return (
+    <div className="form-group">
+      <label htmlFor={id}>
+        {icon && <span className="field-icon">{icon}</span>}
+        {label}
+        {optional ? <span className="optional"> (optional)</span> : <span className="required">*</span>}
+      </label>
+      <div className="input-wrapper">
+        {icon && <span className="input-icon">{icon}</span>}
+        <input
+          id={id} type={type}
+          placeholder={placeholder}
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          maxLength={maxLength}
+          readOnly={readonly}
+          className={`${error ? 'input-error' : ''} ${icon ? 'has-icon' : ''} ${readonly ? 'input-readonly' : ''}`}
+        />
+        {loading && <span className="input-spinner" />}
+      </div>
+      {helper && !error && <span className="helper-text">{helper}</span>}
+      {error && <span className="error-text">{error}</span>}
+    </div>
+  );
+}
+
+function SelectField({ id, label, icon, value, onChange, options, placeholder, error, manualPlaceholder, manualValue, onManualChange }) {
+  return (
+    <div className="form-group">
+      <label htmlFor={id}>
+        {icon && <span className="field-icon">{icon}</span>}
+        {label} <span className="required">*</span>
+      </label>
+      <div className="input-wrapper">
+        {icon && <span className="input-icon">{icon}</span>}
+        {options.length > 0 ? (
+          <select
+            id={id}
+            value={value}
+            onChange={onChange}
+            className={`${error ? 'input-error' : ''} has-icon`}
+          >
+            <option value="">{placeholder}</option>
+            {options.map(o => <option key={o} value={o}>{o}</option>)}
+          </select>
+        ) : (
+          <input
+            id={id}
+            type="text"
+            placeholder={manualPlaceholder}
+            value={manualValue}
+            onChange={e => onManualChange(e.target.value)}
+            className={`${error ? 'input-error' : ''} has-icon`}
+          />
+        )}
+      </div>
+      {error && <span className="error-text">{error}</span>}
     </div>
   );
 }

@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
 export default function ProductCard({ product }) {
+  const navigate = useNavigate();
   const { addItem } = useCart();
   const [imgLoaded, setImgLoaded] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
@@ -10,19 +12,37 @@ export default function ProductCard({ product }) {
     ((product.originalPrice - product.price) / product.originalPrice) * 100
   );
 
-  const handleAdd = () => {
+  const handleAdd = (e) => {
+    e.stopPropagation();
     setIsAdding(true);
     addItem(product);
     setTimeout(() => setIsAdding(false), 600);
   };
 
+  const handleCardClick = () => {
+    navigate(`/product?id=${product.id}`);
+  };
+
   return (
-    <div className="mithila-card group">
+    <div
+      className="mithila-card group cursor-pointer hover:-translate-y-2 hover:shadow-xl transition-all duration-500"
+      onClick={handleCardClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === 'Enter') handleCardClick(); }}
+    >
       {/* Image Section */}
       <div className="relative overflow-hidden aspect-square bg-cream">
         {/* Mithila corner accents */}
         <div className="absolute top-0 left-0 w-12 h-12 z-10">
-          <svg viewBox="0 0 48 48" fill="none" className="w-full h-full opacity-20">
+          <svg viewBox="0 0 48 48" fill="none" className="w-full h-full opacity-30 transition-opacity group-hover:opacity-60">
+            <path d="M0 0 L48 0 L0 48Z" fill="#C1440E" />
+            <circle cx="12" cy="12" r="3" fill="#E1AD01" />
+          </svg>
+        </div>
+        {/* Bottom-right corner */}
+        <div className="absolute bottom-0 right-0 w-12 h-12 z-10 rotate-180">
+          <svg viewBox="0 0 48 48" fill="none" className="w-full h-full opacity-30 transition-opacity group-hover:opacity-60">
             <path d="M0 0 L48 0 L0 48Z" fill="#C1440E" />
             <circle cx="12" cy="12" r="3" fill="#E1AD01" />
           </svg>
@@ -30,14 +50,14 @@ export default function ProductCard({ product }) {
 
         {/* Badge */}
         {product.badge && (
-          <div className="absolute top-3 right-3 z-10 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gradient-to-r from-terracotta to-deepred text-white shadow-lg">
+          <div className="absolute top-3 right-3 z-10 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gradient-to-r from-terracotta to-deepred text-white shadow-lg animate-pulse-soft">
             {product.badge}
           </div>
         )}
 
         {/* Discount */}
         {discount > 0 && (
-          <div className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full text-[10px] font-bold bg-mustard text-darkbrown">
+          <div className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full text-[10px] font-bold bg-mustard text-darkbrown shadow-md">
             {discount}% OFF
           </div>
         )}
@@ -46,7 +66,7 @@ export default function ProductCard({ product }) {
         <img
           src={product.image}
           alt={product.name}
-          className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${
+          className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1 ${
             imgLoaded ? 'opacity-100' : 'opacity-0'
           }`}
           onLoad={() => setImgLoaded(true)}
@@ -58,17 +78,17 @@ export default function ProductCard({ product }) {
         )}
 
         {/* Hover overlay with quick-add */}
-        <div className="absolute inset-0 bg-gradient-to-t from-darkbrown/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center pb-4">
+        <div className="absolute inset-0 bg-gradient-to-t from-darkbrown/70 via-darkbrown/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center pb-4">
           <button
             onClick={handleAdd}
             disabled={isAdding}
-            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 ${
+            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 transform translate-y-6 group-hover:translate-y-0 ${
               isAdding
-                ? 'bg-green-500 text-white scale-105'
-                : 'bg-white text-darkbrown hover:bg-mustard hover:text-darkbrown shadow-xl'
+                ? 'bg-green-500 text-white scale-105 shadow-lg shadow-green-500/30'
+                : 'bg-white text-darkbrown hover:bg-mustard hover:text-darkbrown hover:scale-105 shadow-xl'
             }`}
           >
-            {isAdding ? '✓ Added!' : '+ Add to Cart'}
+            {isAdding ? '✓ Added!' : '+ Quick Add'}
           </button>
         </div>
       </div>
@@ -76,7 +96,8 @@ export default function ProductCard({ product }) {
       {/* Info Section */}
       <div className="p-5">
         {/* Category tag */}
-        <div className="text-[10px] font-bold uppercase tracking-widest text-terracotta/60 mb-1.5">
+        <div className="text-[10px] font-bold uppercase tracking-widest text-terracotta/60 mb-1.5 flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-terracotta/40" />
           {product.category}
         </div>
 
@@ -105,7 +126,7 @@ export default function ProductCard({ product }) {
         </p>
 
         {/* Price & Weight */}
-        <div className="flex items-end justify-between mt-4">
+        <div className="flex items-end justify-between mt-4 pt-3 border-t border-cream-dark/50">
           <div>
             <div className="flex items-baseline gap-2">
               <span className="font-display text-xl font-bold text-darkbrown">
@@ -122,10 +143,10 @@ export default function ProductCard({ product }) {
           <button
             onClick={handleAdd}
             disabled={isAdding}
-            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
+            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 shadow-sm ${
               isAdding
-                ? 'bg-green-500 text-white scale-110 rotate-12'
-                : 'bg-cream hover:bg-terracotta hover:text-white text-earthbrown'
+                ? 'bg-green-500 text-white scale-110 rotate-12 shadow-lg shadow-green-500/20'
+                : 'bg-cream hover:bg-terracotta hover:text-white hover:shadow-lg hover:shadow-terracotta/20 text-earthbrown'
             }`}
           >
             {isAdding ? '✓' : '+'}

@@ -35,13 +35,13 @@ export default function Navbar() {
       scrolled ? 'bg-white/90 backdrop-blur-xl shadow-lg shadow-earthbrown/5 py-2' : 'bg-transparent py-4'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 group">
+        {/* Logo — always left */}
+        <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
           <img src="/images/logo.png" alt="Maati Ka Swaad" className={`transition-all duration-300 ${scrolled ? 'h-10' : 'h-14'} w-auto object-contain rounded-lg`} />
         </Link>
 
-        {/* Desktop Links */}
-        <ul className="hidden md:flex items-center gap-1">
+        {/* Desktop Links — centered */}
+        <ul className="hidden md:flex items-center justify-center gap-1 flex-1 mx-6">
           {links.map(l => (
             <li key={l.href}>
               <a href={l.href} className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${

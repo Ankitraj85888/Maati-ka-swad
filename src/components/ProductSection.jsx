@@ -76,12 +76,12 @@ export default function ProductSection() {
 
         <MithilaDivider motif="fish" />
 
-        {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+        {/* Product Grid — centered if fewer than 3 */}
+        <div className="flex flex-wrap justify-center gap-8 mt-12">
           {filtered.map((product, i) => (
             <div
               key={product.id}
-              className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+              className={`w-full sm:w-[calc(50%-16px)] lg:w-[calc(33.333%-22px)] max-w-sm transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
               style={{ transitionDelay: `${300 + i * 100}ms` }}
             >
               <ProductCard product={product} />
