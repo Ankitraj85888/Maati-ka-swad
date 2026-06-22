@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
+import DeliveryAddress from './pages/DeliveryAddress';
 import { useCart } from './context/CartContext';
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/delivery-address" element={<DeliveryAddress />} />
         <Route
           path="/checkout"
           element={

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -46,16 +46,11 @@
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;font-size:.82rem">
           <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-            <input type="checkbox" style="accent-color:var(--primary)"> Remember me
+            <input type="checkbox" id="login-remember" style="accent-color:var(--primary)"> Remember me
           </label>
-          <a href="#" style="color:var(--primary)">Forgot password?</a>
+          <a href="#" onclick="handleForgotPassword()" style="color:var(--primary)">Forgot password?</a>
         </div>
-        <button class="btn btn-primary btn-full" onclick="handleLogin()">Sign In →</button>
-        <div class="login-divider"><div class="login-divider-line"></div><span class="login-divider-text">or continue with</span><div class="login-divider-line"></div></div>
-        <div class="social-login">
-          <button class="social-login-btn" onclick="socialLogin('google')">🔍 Google</button>
-          <button class="social-login-btn" onclick="socialLogin('facebook')">📘 Facebook</button>
-        </div>
+        <button class="btn btn-primary btn-full" id="btn-login" onclick="handleLogin()">Sign In →</button>
         <p style="text-align:center;font-size:.82rem;color:var(--text-muted);margin-top:20px">
           Don't have an account? <a href="#" onclick="switchAuthTab('signup')" style="color:var(--primary)">Create one →</a>
         </p>
@@ -65,7 +60,7 @@
       <div class="auth-form" id="form-signup">
         <div class="product-form-grid" style="gap:12px">
           <div class="form-group">
-            <label class="form-label">First Name</label>
+            <label class="form-label">First Name <span style="color:var(--error)">*</span></label>
             <input type="text" class="form-control" id="signup-fname" placeholder="Ramesh" required>
           </div>
           <div class="form-group">
@@ -74,15 +69,11 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Email Address</label>
+          <label class="form-label">Email Address <span style="color:var(--error)">*</span></label>
           <input type="email" class="form-control" id="signup-email" placeholder="your@email.com" required>
         </div>
         <div class="form-group">
-          <label class="form-label">Phone Number</label>
-          <input type="tel" class="form-control" id="signup-phone" placeholder="+91 98765 43210">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Password</label>
+          <label class="form-label">Password <span style="color:var(--error)">*</span></label>
           <div style="position:relative">
             <input type="password" class="form-control" id="signup-password" placeholder="Min. 6 characters" required>
             <button type="button" onclick="togglePwd('signup-password')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text-muted)">👁</button>
@@ -91,7 +82,7 @@
         <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:16px;line-height:1.6">
           By creating an account, you agree to our <a href="#" style="color:var(--primary)">Terms of Service</a> and <a href="#" style="color:var(--primary)">Privacy Policy</a>.
         </div>
-        <button class="btn btn-primary btn-full" onclick="handleSignup()">Create Account →</button>
+        <button class="btn btn-primary btn-full" id="btn-signup" onclick="handleSignup()">Create Account →</button>
         <p style="text-align:center;font-size:.82rem;color:var(--text-muted);margin-top:20px">
           Already have an account? <a href="#" onclick="switchAuthTab('login')" style="color:var(--primary)">Sign in →</a>
         </p>

@@ -8,7 +8,7 @@ export default function SignupPage() {
   const location = useLocation();
   const from = location.state?.from || '/';
 
-  const [form, setForm] = useState({ name: '', mobile: '', email: '', password: '', confirm: '' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' });
   const [showPwd, setShowPwd] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,19 +19,30 @@ export default function SignupPage() {
     e.preventDefault();
     setError('');
 
-    if (form.password !== form.confirm) {
-      setError('Passwords do not match');
+    if (!form.name.trim()) {
+      setError('Please enter your full name');
       return;
     }
-    if (form.mobile.length < 10) {
-      setError('Enter a valid 10-digit mobile number');
+    if (!form.email.trim()) {
+      setError('Please enter your email address');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+    if (form.password.length < 6) {
+      setError('Password must be at least 6 characters');
+      return;
+    }
+    if (form.password !== form.confirm) {
+      setError('Passwords do not match');
       return;
     }
 
     setLoading(true);
     const result = await signup({
       name: form.name,
-      mobile: form.mobile,
       email: form.email,
       password: form.password,
     });
@@ -83,28 +94,9 @@ export default function SignupPage() {
               />
             </div>
 
-            {/* Mobile */}
-            <div>
-              <label className="block text-sm font-semibold text-darkbrown mb-1.5">Mobile Number</label>
-              <div className="flex">
-                <span className="flex items-center px-3 bg-cream rounded-l-xl border border-r-0 border-cream-dark text-sm text-earthbrown/60">
-                  +91
-                </span>
-                <input
-                  type="tel"
-                  value={form.mobile}
-                  onChange={e => set('mobile', e.target.value.replace(/\D/g, '').slice(0, 10))}
-                  placeholder="10-digit mobile number"
-                  className="flex-1 px-4 py-3 rounded-r-xl border border-cream-dark bg-white text-darkbrown placeholder:text-earthbrown/30 focus:outline-none focus:ring-2 focus:ring-terracotta/20 focus:border-terracotta/40 transition-all"
-                  maxLength={10}
-                  required
-                />
-              </div>
-            </div>
-
             {/* Email */}
             <div>
-              <label className="block text-sm font-semibold text-darkbrown mb-1.5">Email ID</label>
+              <label className="block text-sm font-semibold text-darkbrown mb-1.5">Email Address</label>
               <input
                 type="email"
                 value={form.email}

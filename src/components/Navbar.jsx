@@ -78,6 +78,7 @@ export default function Navbar() {
                     <p className="text-xs text-earthbrown/50">{user.email || user.mobile}</p>
                   </div>
                   <Link to="/cart" onClick={() => setUserMenu(false)} className="block px-3 py-2 rounded-xl text-sm text-earthbrown hover:bg-cream hover:text-terracotta transition-colors">🛒 My Cart</Link>
+                  <Link to="/delivery-address" onClick={() => setUserMenu(false)} className="block px-3 py-2 rounded-xl text-sm text-earthbrown hover:bg-cream hover:text-terracotta transition-colors">📍 Delivery Address</Link>
                   <button onClick={handleLogout} className="w-full text-left px-3 py-2 rounded-xl text-sm text-red-500 hover:bg-red-50 transition-colors">🚪 Logout</button>
                 </div>
               </>
@@ -117,6 +118,7 @@ export default function Navbar() {
             <a key={l.href} href={l.href} onClick={() => setMobileOpen(false)} className="block px-4 py-3 rounded-xl text-earthbrown font-medium hover:bg-cream hover:text-terracotta transition-colors">{l.label}</a>
           ))}
           <Link to="/cart" onClick={() => setMobileOpen(false)} className="block px-4 py-3 rounded-xl text-earthbrown font-medium hover:bg-cream hover:text-terracotta transition-colors">🛒 Cart {itemCount > 0 && `(${itemCount})`}</Link>
+          <Link to="/delivery-address" onClick={() => setMobileOpen(false)} className="block px-4 py-3 rounded-xl text-earthbrown font-medium hover:bg-cream hover:text-terracotta transition-colors">📍 Delivery Address</Link>
           {isLoggedIn ? (
             <button onClick={handleLogout} className="block w-full text-left px-4 py-3 rounded-xl text-red-500 font-medium hover:bg-red-50 transition-colors">🚪 Logout ({user.name})</button>
           ) : (

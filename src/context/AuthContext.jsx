@@ -24,13 +24,13 @@ export function AuthProvider({ children }) {
     else localStorage.removeItem('mks_user');
   }, [user]);
 
-  /** ✅ REAL signup — calls backend /api/auth/register */
-  const signup = async ({ name, mobile, email, password }) => {
+  /** ✅ Signup — calls backend /api/auth/register */
+  const signup = async ({ name, email, password }) => {
     try {
       const res = await fetch(`${API}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password, phone: mobile }),
+        body: JSON.stringify({ name, email, password }),
       });
       const data = await res.json();
       if (!res.ok) return { success: false, error: data.error || 'Registration failed' };
@@ -45,16 +45,7 @@ export function AuthProvider({ children }) {
     }
   };
 
-  /** ✅ REAL OTP login — uses backend-verified token & user */
-  const loginWithOTP = (mobile, otp, token, userData) => {
-    if (!token || !userData) return { success: false, error: 'OTP verification failed' };
-    const u = { ...userData, method: 'otp', mobile };
-    localStorage.setItem('mks_token', token);
-    setUser(u);
-    return { success: true };
-  };
-
-  /** ✅ REAL email login — calls backend /api/auth/login */
+  /** ✅ Email login — calls backend /api/auth/login */
   const loginWithEmail = async (email, password) => {
     try {
       const res = await fetch(`${API}/auth/login`, {
@@ -82,7 +73,7 @@ export function AuthProvider({ children }) {
   const isLoggedIn = !!user;
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, loading, loginWithOTP, loginWithEmail, signup, logout }}>
+    <AuthContext.Provider value={{ user, isLoggedIn, loading, loginWithEmail, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );
