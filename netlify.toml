@@ -23,6 +23,11 @@
   to     = "/index.html"
   status = 200
 
+[[redirects]]
+  from   = "/delivery-address"
+  to     = "/index.html"
+  status = 200
+
 # Static HTML pages — served as-is from dist root
 [[redirects]]
   from   = "/shop"
