@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: maati-ka-swad
+    env: node
+    buildCommand: npm run build
+    startCommand: npm start
+    staticPublishPath: ./dist
