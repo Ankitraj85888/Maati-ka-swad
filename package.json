@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm install --include=dev && npx vite build",
     "start": "vite preview --port $PORT --host",
     "preview": "vite preview",
     "backend": "node backend/server.js"
