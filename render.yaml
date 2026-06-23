@@ -1,3 +1,10 @@
+databases:
+  - name: maati-ka-swad-db
+    databaseName: maatikaswad
+    user: maatikaswad
+    plan: free
+    ipAllowList: []
+
 services:
   - type: web
     name: maati-ka-swad
