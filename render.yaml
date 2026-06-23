@@ -4,3 +4,10 @@ services:
     env: node
     buildCommand: npm install --include=dev && npm run build
     startCommand: npm start
+
+  - type: web
+    name: maati-ka-swad-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
