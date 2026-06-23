@@ -12,6 +12,35 @@
 <body>
 <div id="page-loader"><div class="loader-inner"><div class="loader-logo">माटी का स्वाद</div><div class="loader-spinner"></div></div></div>
 <div id="toast-container"></div>
+<div class="search-overlay" id="search-overlay">
+  <div class="search-box"><span>🔍</span><input type="text" id="search-input" placeholder="Search products..."><button class="search-btn" onclick="document.getElementById('search-overlay').classList.remove('open')">✕</button></div>
+  <div class="search-results" id="search-results"></div>
+</div>
+
+<nav class="navbar opaque">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">🍶 Maati Ka <span>Swad</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="shop.html" class="nav-link">Shop</a></li>
+      <li><a href="about.html" class="nav-link">About</a></li>
+      <li><a href="contact.html" class="nav-link">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-icon-btn search-open-btn">🔍</button>
+      <a href="login.html" class="nav-icon-btn nav-user-btn">👤</a>
+      <a href="cart.html" class="nav-icon-btn" style="position:relative">🛒 <span class="cart-count" style="display:none"></span></a>
+    </div>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </div>
+  <div class="mobile-menu">
+    <a href="index.html" class="nav-link">🏠 Home</a>
+    <a href="shop.html" class="nav-link">🛍️ Shop</a>
+    <a href="about.html" class="nav-link">ℹ️ About</a>
+    <a href="contact.html" class="nav-link">📞 Contact</a>
+    <a href="cart.html" class="nav-link">🛒 Cart</a>
+  </div>
+</nav>
 
 <!-- Background -->
 <div style="position:fixed;inset:0;background:linear-gradient(135deg,var(--secondary) 0%,var(--primary-dark) 100%);z-index:-1"></div>
