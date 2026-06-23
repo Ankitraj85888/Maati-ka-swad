@@ -54,9 +54,13 @@ export default defineConfig({
   plugins: [react(), copyStaticFiles()],
   server: {
     port: 5173,
+    allowedHosts: ['maati-ka-swad-backend.onrender.com'],
     proxy: {
       '/api': 'https://maati-ka-swad-backend.onrender.com'
     }
+  },
+  preview: {
+    allowedHosts: ['maati-ka-swad-backend.onrender.com']
   },
   build: {
     outDir: 'dist',
